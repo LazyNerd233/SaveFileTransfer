@@ -14,17 +14,22 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.event.AncestorListener;
+import java.awt.Desktop;
+import java.awt.Dimension;
 
 public class GUI implements ActionListener
 {
     private JFrame frame;
     private JPanel panel;
     private JButton transferButton;
+    private JButton srcFileButton;
     private JLabel label;
     private JDialog errorlog;
     private JButton errorButton;
     private int numClicks = 0;
-    DataTransfer dataTransfer = new DataTransfer();   
+    DataTransfer dataTransfer = new DataTransfer();
+    File srcDir = new File("E:\\Steam\\userdata\\312769744\\262060\\remote");
+    File destDir = new File("C:\\Users\\alfre\\Desktop\\Darkest dungeon save file");
     
     public static void main(String[] args)
     {
@@ -37,6 +42,7 @@ public class GUI implements ActionListener
         frame = new JFrame();
         panel = new JPanel();
         transferButton = new JButton("Transfer your save data");
+        srcFileButton = new JButton("Open the sorce file");
         transferButton.addActionListener(this); 
         label = new JLabel("number of save files successfully transfer: 0");
         
@@ -44,6 +50,8 @@ public class GUI implements ActionListener
         panel.setLayout(new GridLayout(0, 1));
         panel.add(label);
         panel.add(transferButton);
+        transferButton.setPreferredSize(new Dimension(50, 50));
+        
                          
         frame.add(panel, BorderLayout.CENTER);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -51,12 +59,29 @@ public class GUI implements ActionListener
         frame.setLocation(520, 220);
         frame.pack();
         frame.setVisible(true);
+        
+        panel.add(srcFileButton);
+        srcFileButton.addActionListener(
+            new ActionListener() 
+            {
+                public void actionPerformed(ActionEvent e)
+                {
+                    Desktop desktop = Desktop.getDesktop();
+                    try {
+                        desktop.open(destDir);
+                    }
+                    catch (IOException e1) {
+                        // TODO Auto-generated catch block
+                        e1.printStackTrace();
+                    }
+                }
+            }
+        ); 
+        
     }
 
     @Override
     public void actionPerformed(ActionEvent arg0) {     
-        File srcDir = new File("E:\\Steam\\userdata\\312769744\\262060\\remote");
-        File destDir = new File("C:\\Users\\alfre\\Desktop\\Darkest dungeon save file");
         try {
             dataTransfer.copydir(srcDir, destDir);
             numClicks++;

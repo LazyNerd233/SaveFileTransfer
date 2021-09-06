@@ -35,7 +35,6 @@ public class DataTransfer {
                 // recursive copy
                 copydir(srcFile, destFile);
             }
-
         }
         else
         {
